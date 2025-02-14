@@ -1,4 +1,4 @@
-const generateButton = document.getElementById('generate-button');
+const generateButton = document.getElementById('generate-button'); 
 const copyButton = document.getElementById('copy-button');
 const promptArea = document.getElementById('prompt-area');
 const notification = document.getElementById('notification');
