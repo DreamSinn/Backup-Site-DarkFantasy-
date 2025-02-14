@@ -72,7 +72,12 @@ const keywords = {
         " The atmosphere is charged with a suffocating energy, leaving the senses overwhelmed and tense.",
         " The darkness thickens, casting every detail in shadow as unseen eyes watch.",
         " Shadows move where they shouldn’t, and the very ground seems to shift beneath your feet.",
-        " The air crackles with malevolent energy, as though the very world itself is twisted."
+        " The air crackles with malevolent energy, as though the very world itself is twisted.",
+        " The world trembles, as if some great evil stirs in the depths of the unknown.",
+        " A chill fills the air, and the very essence of the place feels corrupted.",
+        " The haunting silence is broken only by the sound of distant whispers, as if the land itself is alive.",
+        " A sense of dread envelops the scene, as though time itself has stopped in this cursed place.",
+        " A malevolent presence hovers over the scene, its influence palpable in every shadow."
     ]
 };
 
@@ -99,7 +104,7 @@ function generatePrompt() {
     let figure = getRandomItem(keywords.figures[figureType], previousWord);
     previousWord = figure;
     
-    newPrompt += `${figure} `;
+    newPrompt += `${figure}, positioned close to the viewer, `;
     newPrompt += `stands amidst ${getRandomItem(keywords.environments, previousWord)} `;
     previousWord = newPrompt.trim();
     
@@ -119,7 +124,8 @@ function generatePrompt() {
 
     newPrompt += getRandomItem(keywords.endings, previousWord);
     
-    newPrompt += " --v 5 --stylize 1000";
+    // Adiciona as palavras obrigatórias
+    newPrompt += " dvd screengrab, from 1982 dark fantasy film, 'excalibur' --ar 3:2 --v 5 --stylize 1000 --style DarkFantasy --style retro_bits";
     
     counter++; // Incrementa o contador para alternar humano/monstro
     
