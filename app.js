@@ -118,8 +118,12 @@ function generatePrompt() {
     let figure = getRandomItem(keywords.figures[figureType], usedFigures[figureType]);
     
     newPrompt += `${figure}, positioned close to the viewer, `;
-    newPrompt += `stands amidst ${getRandomItem(keywords.environments, usedEnvironments)} `;
-    newPrompt += `of ${getRandomItem(keywords.landscapeDetails, usedLandscapeDetails)}, `;
+
+    // Evita repetir os mesmos ambientes e terminações
+    let environment = getRandomItem(keywords.environments, usedEnvironments);
+    let ending = getRandomItem(keywords.endings, usedEndings);
+
+    newPrompt += `stands amidst ${environment} of ${getRandomItem(keywords.landscapeDetails, usedLandscapeDetails)}, `;
     newPrompt += `${getRandomItem(keywords.verbs, usedVerbs)} `;
     newPrompt += `${getRandomItem(keywords.moodStyle, usedMoodStyle)} `;
     newPrompt += `${getRandomItem(keywords.technicalDescriptive, usedTechnicalDescriptive)}. `;
@@ -128,7 +132,7 @@ function generatePrompt() {
     newPrompt += `${figure} is ${getRandomItem(keywords.gazeDirection, usedGazeDirection)}. `;
 
     // Escolhe um final único
-    newPrompt += getRandomItem(keywords.endings, usedEndings);
+    newPrompt += ending;
     
     // Adiciona as palavras obrigatórias
     newPrompt += " dvd screengrab, from 1982 dark fantasy film, 'excalibur' --ar 3:2 --v 5 --stylize 1000 --style DarkFantasy --style retro_bits";
