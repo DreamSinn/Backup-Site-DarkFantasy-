@@ -1,6 +1,6 @@
-const generateButton = document.getElementById('generate-button'); 
+const generateButton = document.getElementById('generate-button');
 const copyButton = document.getElementById('copy-button');
-const promptArea = document.getElementById('prompt-area');
+const promptArea = document.getElementById('prompt-area'); // Corrigi o ID para 'prompt-area'
 const notification = document.getElementById('notification');
 
 const keywords = {
@@ -81,48 +81,54 @@ const keywords = {
     ]
 };
 
+let usedBeginnings = [];
+let usedEndings = [];
+let usedFigures = { humans: [], monsters: [] };
+let usedEnvironments = [];
+let usedLandscapeDetails = [];
+let usedSkies = [];
+let usedDistantElements = [];
+let usedGazeDirection = [];
+let usedVerbs = [];
+let usedMoodStyle = [];
+let usedTechnicalDescriptive = [];
+
 let counter = 0;
 
-function getRandomItem(array, previousItem) {
+function getRandomItem(array, usedItems) {
+    if (array.length === usedItems.length) {
+        usedItems.length = 0; // Reset if all items have been used
+    }
     let item;
     do {
         item = array[Math.floor(Math.random() * array.length)];
-    } while (item === previousItem);
+    } while (usedItems.includes(item));
+    usedItems.push(item);
     return item;
 }
 
 function generatePrompt() {
-    let previousWord = null;
-    
     let newPrompt = "/imagine prompt: ";
     
-    newPrompt += `${getRandomItem(keywords.beginnings, previousWord)} `;
-    previousWord = newPrompt.trim();
-
+    // Escolhe um início único
+    newPrompt += `${getRandomItem(keywords.beginnings, usedBeginnings)} `;
+    
     // Alterna entre humanos e monstros
     let figureType = counter % 4 < 2 ? "humans" : "monsters";
-    let figure = getRandomItem(keywords.figures[figureType], previousWord);
-    previousWord = figure;
+    let figure = getRandomItem(keywords.figures[figureType], usedFigures[figureType]);
     
     newPrompt += `${figure}, positioned close to the viewer, `;
-    newPrompt += `stands amidst ${getRandomItem(keywords.environments, previousWord)} `;
-    previousWord = newPrompt.trim();
-    
-    newPrompt += `of ${getRandomItem(keywords.landscapeDetails, previousWord)}, `;
-    previousWord = newPrompt.trim();
-    
-    newPrompt += `${getRandomItem(keywords.verbs, previousWord)} `;
-    previousWord = newPrompt.trim();
-    
-    newPrompt += `${getRandomItem(keywords.moodStyle, previousWord)} `;
-    previousWord = newPrompt.trim();
-    
-    newPrompt += `${getRandomItem(keywords.technicalDescriptive, previousWord)}. `;
+    newPrompt += `stands amidst ${getRandomItem(keywords.environments, usedEnvironments)} `;
+    newPrompt += `of ${getRandomItem(keywords.landscapeDetails, usedLandscapeDetails)}, `;
+    newPrompt += `${getRandomItem(keywords.verbs, usedVerbs)} `;
+    newPrompt += `${getRandomItem(keywords.moodStyle, usedMoodStyle)} `;
+    newPrompt += `${getRandomItem(keywords.technicalDescriptive, usedTechnicalDescriptive)}. `;
 
     // Adiciona a direção do olhar para a câmera
-    newPrompt += `${figure} is ${getRandomItem(keywords.gazeDirection, previousWord)}. `;
+    newPrompt += `${figure} is ${getRandomItem(keywords.gazeDirection, usedGazeDirection)}. `;
 
-    newPrompt += getRandomItem(keywords.endings, previousWord);
+    // Escolhe um final único
+    newPrompt += getRandomItem(keywords.endings, usedEndings);
     
     // Adiciona as palavras obrigatórias
     newPrompt += " dvd screengrab, from 1982 dark fantasy film, 'excalibur' --ar 3:2 --v 5 --stylize 1000 --style DarkFantasy --style retro_bits";
