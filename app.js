@@ -1,3 +1,8 @@
+const generateButton = document.getElementById('generate-button');
+const copyButton = document.getElementById('copy-button');
+const promptArea = document.getElementById('prompt-area');
+const notification = document.getElementById('notification');
+
 const keywords = {
     figures: {
         humans: [
@@ -21,71 +26,6 @@ const keywords = {
         orcs: [
             "A brutal orc warlord", "A savage orc berserker", "A cunning orc shaman", "A fearsome orc raider",
             "A battle-scarred orc veteran", "A hulking orc brute", "A stealthy orc scout", "A menacing orc chieftain"
-        ],
-        hobbits: [
-            "A cheerful hobbit gardener", "A curious hobbit adventurer", "A brave hobbit burglar",
-            "A jovial hobbit innkeeper", "A wise hobbit elder", "A mischievous hobbit trickster",
-            "A determined hobbit traveler", "A humble hobbit farmer"
-        ],
-        ents: [
-            "A towering, ancient ent", "A wise, slow-speaking tree shepherd", "A vengeful, wrathful ent",
-            "A gentle, moss-covered ent", "A mysterious, whispering ent", "A protective, forest guardian ent",
-            "A weathered, bark-covered ent", "A sorrowful, mourning ent"
-        ],
-        dragons: [
-            "A colossal, fire-breathing dragon", "A sleek, ice-winged dragon", "A shadowy, poison-dripping dragon",
-            "A golden, treasure-hoarding dragon", "A wise, ancient dragon", "A ferocious, battle-scarred dragon",
-            "A mystical, arcane dragon", "A cursed, undead dragon"
-        ],
-        goblins: [
-            "A sneaky, green-skinned goblin", "A cunning, trap-setting goblin", "A vicious, dagger-wielding goblin",
-            "A mischievous, thieving goblin", "A cowardly, cowering goblin", "A brutish, club-wielding goblin",
-            "A shamanistic, spell-casting goblin", "A chittering, pack-hunting goblin"
-        ],
-        trolls: [
-            "A hulking, cave-dwelling troll", "A dim-witted, boulder-throwing troll", "A vicious, bridge-guarding troll",
-            "A regenerating, forest troll", "A cursed, stone troll", "A massive, mountain troll",
-            "A swamp-dwelling, mud-covered troll", "A fire-resistant, magma troll"
-        ],
-        fairies: [
-            "A tiny, glowing fairy", "A mischievous, prankster fairy", "A wise, ancient fairy",
-            "A protective, nature-bound fairy", "A cursed, dark fairy", "A playful, sparkling fairy",
-            "A vengeful, thorn-covered fairy", "A mystical, moonlit fairy"
-        ],
-        demons: [
-            "A towering, horned demon", "A shadowy, soul-stealing demon", "A fiery, lava-covered demon",
-            "A cunning, contract-making demon", "A grotesque, multi-headed demon", "A cursed, plague-bearing demon",
-            "A seductive, illusion-casting demon", "A wrathful, war-bringing demon"
-        ],
-        darkElves: [
-            "A shadowy, dark elven assassin", "A ruthless, dark elven warlord", "A cunning, dark elven sorcerer",
-            "A vengeful, dark elven priestess", "A stealthy, dark elven ranger", "A noble, dark elven lord",
-            "A cursed, dark elven outcast", "A mysterious, dark elven spy"
-        ],
-        halfElves: [
-            "A charismatic, half-elven bard", "A skilled, half-elven ranger", "A wise, half-elven mage",
-            "A determined, half-elven warrior", "A mysterious, half-elven traveler", "A conflicted, half-elven rogue",
-            "A noble, half-elven diplomat", "A cursed, half-elven wanderer"
-        ],
-        werewolves: [
-            "A ferocious, full-moon werewolf", "A cursed, transforming werewolf", "A pack-leading, alpha werewolf",
-            "A stealthy, forest-dwelling werewolf", "A vengeful, cursed werewolf", "A noble, controlled werewolf",
-            "A savage, bloodthirsty werewolf", "A mystical, spirit-bound werewolf"
-        ],
-        vampires: [
-            "A seductive, immortal vampire", "A cursed, blood-drinking vampire", "A noble, ancient vampire lord",
-            "A vengeful, vampire hunter turned vampire", "A stealthy, shadow-dwelling vampire",
-            "A powerful, hypnotic vampire", "A cursed, sunlight-fearing vampire", "A mystical, bat-transforming vampire"
-        ],
-        elementals: [
-            "A raging, fire elemental", "A serene, water elemental", "A sturdy, earth elemental",
-            "A swirling, air elemental", "A mystical, arcane elemental", "A cursed, shadow elemental",
-            "A protective, nature elemental", "A chaotic, storm elemental"
-        ],
-        giants: [
-            "A towering, mountain giant", "A fierce, frost giant", "A brutal, hill giant",
-            "A wise, ancient giant", "A cursed, fire giant", "A protective, forest giant",
-            "A vengeful, storm giant", "A mystical, cloud giant"
         ]
     },
     environments: [
@@ -156,11 +96,7 @@ const keywords = {
 
 let usedBeginnings = [];
 let usedEndings = [];
-let usedFigures = {
-    humans: [], monsters: [], elves: [], dwarves: [], orcs: [], hobbits: [], ents: [], dragons: [],
-    goblins: [], trolls: [], fairies: [], demons: [], darkElves: [], halfElves: [], werewolves: [],
-    vampires: [], elementals: [], giants: []
-};
+let usedFigures = { humans: [], monsters: [], elves: [], dwarves: [], orcs: [] };
 let usedEnvironments = [];
 let usedLandscapeDetails = [];
 let usedSkies = [];
@@ -192,8 +128,25 @@ function generatePrompt() {
     newPrompt += `${getRandomItem(keywords.beginnings, usedBeginnings)} `;
     
     // Alterna entre as raças
-    const races = Object.keys(keywords.figures);
-    let figureType = races[counter % races.length];
+    let figureType;
+    switch (counter % 5) {
+        case 0:
+        case 1:
+            figureType = "humans";
+            break;
+        case 2:
+            figureType = "monsters";
+            break;
+        case 3:
+            figureType = "elves";
+            break;
+        case 4:
+            figureType = "dwarves";
+            break;
+        case 5:
+            figureType = "orcs";
+            break;
+    }
     let figure = getRandomItem(keywords.figures[figureType], usedFigures[figureType]);
     
     newPrompt += `${figure}, positioned close to the viewer, `;
