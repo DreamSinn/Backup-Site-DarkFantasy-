@@ -1,5 +1,4 @@
 const generateButton = document.getElementById('generate-button');
-const copyButton = document.getElementById('copy-button');
 const promptArea = document.getElementById('prompt-area');
 const notification = document.getElementById('notification');
 
@@ -179,7 +178,7 @@ let counter = 0;
 
 function getRandomItem(array, usedItems) {
     if (array.length === usedItems.length) {
-        usedItems.length = 0; // Reset if all items have been used
+        usedItems.length = 0; // Reset se todos os itens foram usados
     }
     let item;
     do {
@@ -189,37 +188,88 @@ function getRandomItem(array, usedItems) {
     return item;
 }
 
-function generatePrompt() {
-    console.log("Função generatePrompt() chamada!"); // Verifique no console
+// Função para formatar os negative prompts
+function formatNegativePrompts(input) {
+    if (!input) return ''; // Retorna vazio se não houver input
+
+    // Remove espaços extras e divide os termos por vírgulas, espaços ou quebras de linha
+    const terms = input
+        .split(/[,\s\n]+/) // Divide por vírgulas, espaços ou quebras de linha
+        .map(term => term.trim()) // Remove espaços extras
+        .filter(term => term.length > 0); // Remove termos vazios
+
+    // Junta os termos com vírgulas
+    return terms.join(', ');
+}
+
+function generateLandscapePrompt() {
     let newPrompt = "/imagine prompt: ";
     
     // Escolhe um início único
     newPrompt += `${getRandomItem(keywords.beginnings, usedBeginnings)} `;
     
-    // Alterna entre as raças
-    const races = Object.keys(keywords.figures);
-    let figureType = races[counter % races.length];
-    let figure = getRandomItem(keywords.figures[figureType], usedFigures[figureType]);
-    
-    newPrompt += `${figure}, positioned close to the viewer, `;
-
-    // Evita repetir os mesmos ambientes e terminações
-    let environment = getRandomItem(keywords.environments, usedEnvironments);
-    let ending = getRandomItem(keywords.endings, usedEndings);
-
-    newPrompt += `stands amidst ${environment} of ${getRandomItem(keywords.landscapeDetails, usedLandscapeDetails)}, `;
+    // Gera uma paisagem sem figuras
+    newPrompt += `a ${getRandomItem(keywords.environments, usedEnvironments)} of ${getRandomItem(keywords.landscapeDetails, usedLandscapeDetails)}, `;
     newPrompt += `${getRandomItem(keywords.verbs, usedVerbs)} `;
     newPrompt += `${getRandomItem(keywords.moodStyle, usedMoodStyle)} `;
     newPrompt += `${getRandomItem(keywords.technicalDescriptive, usedTechnicalDescriptive)}. `;
 
-    // Adiciona a direção do olhar para a câmera
-    newPrompt += `${figure} is ${getRandomItem(keywords.gazeDirection, usedGazeDirection)}. `;
-
     // Escolhe um final único
-    newPrompt += ending;
+    newPrompt += getRandomItem(keywords.endings, usedEndings);
     
     // Adiciona as palavras obrigatórias
     newPrompt += " dvd screengrab, from 1982 dark fantasy film, 'excalibur' --ar 3:2 --v 5 --stylize 1000 --style DarkFantasy --style retro_bits";
+    
+    return newPrompt;
+}
+
+function generatePrompt() {
+    console.log("Função generatePrompt() chamada!");
+
+    // Obtém e formata os Negative Prompts inseridos pelo usuário
+    const negativePromptInput = document.getElementById('negative-prompt').value;
+    const formattedNegativePrompts = formatNegativePrompts(negativePromptInput);
+    const negativePrompts = formattedNegativePrompts ? ` --no ${formattedNegativePrompts}` : '';
+
+    let newPrompt;
+
+    // Decide aleatoriamente se o prompt será uma paisagem ou incluirá figuras
+    if (Math.random() < 0.5) {
+        newPrompt = generateLandscapePrompt();
+    } else {
+        newPrompt = "/imagine prompt: ";
+        
+        // Escolhe um início único
+        newPrompt += `${getRandomItem(keywords.beginnings, usedBeginnings)} `;
+        
+        // Alterna entre as raças
+        const races = Object.keys(keywords.figures);
+        let figureType = races[counter % races.length];
+        let figure = getRandomItem(keywords.figures[figureType], usedFigures[figureType]);
+        
+        newPrompt += `${figure}, positioned close to the viewer, `;
+
+        // Evita repetir os mesmos ambientes e terminações
+        let environment = getRandomItem(keywords.environments, usedEnvironments);
+        let ending = getRandomItem(keywords.endings, usedEndings);
+
+        newPrompt += `stands amidst ${environment} of ${getRandomItem(keywords.landscapeDetails, usedLandscapeDetails)}, `;
+        newPrompt += `${getRandomItem(keywords.verbs, usedVerbs)} `;
+        newPrompt += `${getRandomItem(keywords.moodStyle, usedMoodStyle)} `;
+        newPrompt += `${getRandomItem(keywords.technicalDescriptive, usedTechnicalDescriptive)}. `;
+
+        // Adiciona a direção do olhar para a câmera
+        newPrompt += `${figure} is ${getRandomItem(keywords.gazeDirection, usedGazeDirection)}. `;
+
+        // Escolhe um final único
+        newPrompt += ending;
+        
+        // Adiciona as palavras obrigatórias
+        newPrompt += " dvd screengrab, from 1982 dark fantasy film, 'excalibur' --ar 3:2 --v 5 --stylize 1000 --style DarkFantasy --style retro_bits";
+    }
+
+    // Adiciona os Negative Prompts ao final do prompt
+    newPrompt += negativePrompts;
     
     counter++; // Incrementa o contador para alternar entre as raças
     
@@ -227,16 +277,18 @@ function generatePrompt() {
 }
 
 generateButton.addEventListener('click', function() {
-    console.log("Botão Gerar clicado!"); // Verifique no console
+    console.log("Botão Gerar clicado!");
     promptArea.textContent = generatePrompt();
 });
 
-copyButton.addEventListener('click', function() {
-    console.log("Botão Copiar clicado!"); // Verifique no console
-    navigator.clipboard.writeText(promptArea.textContent).then(function() {
-        notification.style.display = 'block';
-        setTimeout(() => {
-            notification.style.display = 'none';
-        }, 2000);
-    });
+// Adiciona a funcionalidade de copiar ao clicar na área de prompt
+promptArea.addEventListener('click', function() {
+    if (promptArea.textContent.trim() !== "Your generated prompt will appear here.") {
+        navigator.clipboard.writeText(promptArea.textContent).then(function() {
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 2000);
+        });
+    }
 });
