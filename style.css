@@ -1,43 +1,80 @@
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: #000;
-    color: #e0e0e0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+/* Reset básico */
+body, html {
     margin: 0;
-    background-image: url('https://i.ibb.co/GfJ8Srf4/dark-fantasy-background.jpg');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'MedievalSharp', cursive;
+    color: #E0E0E0;
 }
 
+/* Vídeo de fundo */
+#video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Coloca o vídeo atrás do conteúdo */
+    overflow: hidden;
+}
+
+#video-background video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw; /* 100% da largura da viewport */
+    height: 100vh; /* 100% da altura da viewport */
+    transform: translate(-50%, -50%); /* Centraliza o vídeo */
+    min-width: 100%; /* Garante que cubra a largura */
+    min-height: 100%; /* Garante que cubra a altura */
+    object-fit: cover; /* Corta o vídeo para cobrir a área */
+}
+
+/* Contêiner principal */
 .container {
+    position: relative;
+    z-index: 1; /* Coloca o conteúdo na frente do vídeo */
     background-color: rgba(0, 0, 0, 0.8);
     padding: 20px;
     border-radius: 10px;
     width: 90%;
     max-width: 800px;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    margin: 20px auto; /* Centraliza o contêiner */
 }
 
+/* Título */
 h1 {
-    color: #6A1B9A;
+    font-family: 'Cinzel', serif;
     font-size: 2.5rem;
-    margin-bottom: 20px;
+    color: #6A1B9A;
+    text-shadow: 0 0 10px #6A1B9A, 0 0 20px #6A1B9A;
 }
 
-.button-container {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+/* Área do prompt */
+#prompt-area {
+    padding: 20px;
+    border: 1px solid #6A1B9A;
+    background-color: rgba(34, 34, 34, 0.9);
+    font-family: 'Courier New', monospace;
+    color: #E0E0E0;
+    margin-top: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    animation: glow 3s infinite;
+    height: 150px; /* Altura fixa */
+    overflow-y: auto; /* Adiciona scroll se o conteúdo for muito longo */
 }
 
+/* Animação de brilho */
+@keyframes glow {
+    0% { box-shadow: 0 0 10px #6A1B9A; }
+    50% { box-shadow: 0 0 20px #6A1B9A; }
+    100% { box-shadow: 0 0 10px #6A1B9A; }
+}
+
+/* Botão */
 button {
     padding: 10px 20px;
     background-color: #4CAF50;
@@ -46,28 +83,68 @@ button {
     cursor: pointer;
     border-radius: 5px;
     font-size: 16px;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 button:hover {
     background-color: #45a049;
+    transform: scale(1.05);
 }
 
-#prompt-area {
-    padding: 20px;
-    border: 1px solid #6A1B9A;
-    background-color: rgba(34, 34, 34, 0.9);
-    white-space: pre-wrap;
-    width: 100%;
-    max-width: 800px;
-    min-height: 150px;
-    border-radius: 5px;
-    font-family: 'Courier New', monospace;
-    color: #e0e0e0;
+/* Rodapé */
+footer {
     margin-top: 20px;
-    text-align: left;
+    font-size: 0.9rem;
+    color: #888;
 }
 
+/* Grupo de entrada (textarea) */
+.input-group {
+    width: 100%;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #e0e0e0;
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+}
+
+.input-group textarea {
+    width: 100%;
+    max-width: 600px;
+    padding: 15px;
+    border-radius: 5px;
+    border: 2px solid #6A1B9A;
+    background-color: rgba(34, 34, 34, 0.9);
+    color: #e0e0e0;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 100px;
+    font-family: 'Courier New', monospace;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    background-image: url('https://www.transparenttextures.com/patterns/old-paper.png');
+    background-blend-mode: overlay;
+    background-color: rgba(50, 50, 50, 0.8);
+}
+
+.input-group textarea:focus {
+    border-color: #8B0000;
+    box-shadow: 0 0 10px #8B0000;
+}
+
+.input-group textarea:hover {
+    transform: scale(1.02);
+}
+
+/* Notificação */
 .notification {
     position: fixed;
     bottom: 20px;
@@ -76,22 +153,7 @@ button:hover {
     color: white;
     padding: 15px;
     border-radius: 5px;
-    display: none;
+    display: none; /* Inicialmente oculta */
     font-size: 14px;
     z-index: 1000;
-}
-
-@media (max-width: 768px) {
-    h1 {
-        font-size: 2rem;
-    }
-
-    button {
-        font-size: 14px;
-        padding: 8px 16px;
-    }
-
-    #prompt-area {
-        padding: 15px;
-    }
 }
