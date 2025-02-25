@@ -4,19 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dark Fantasy Prompt Generator</title>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=MedievalSharp&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Dark Fantasy Prompt Generator</h1>
-        <div class="button-container">
-            <button id="generate-button">Generate Prompt</button>
-            <button id="copy-button">Copy</button>
-        </div>
-        <div id="prompt-area">Your generated prompt will appear here.</div>
+    <!-- Vídeo de fundo hospedado no GitHub -->
+    <div id="video-background">
+        <video autoplay muted loop id="my-video">
+            <source src="https://github.com/DreamSinn/Backup-Site-DarkFantasy-/raw/refs/heads/main/videos/pequeno.mp4" type="video/mp4">
+            Seu navegador não suporta vídeos HTML5.
+        </video>
     </div>
 
+    <!-- Conteúdo sobreposto -->
+    <div class="container">
+        <header>
+            <h1>Dark Fantasy Prompt Generator</h1>
+            <p>Create immersive dark fantasy scenes with a single click.</p>
+        </header>
+
+        <!-- Área onde o prompt gerado será exibido -->
+        <div id="prompt-area">Your generated prompt will appear here.</div>
+
+        <!-- Área para Negative Prompts -->
+        <div class="input-group">
+            <label for="negative-prompt">
+                <i class="fas fa-scroll"></i> Negative Prompts:
+            </label>
+            <textarea id="negative-prompt" placeholder="Enter terms to exclude"></textarea>
+        </div>
+
+        <!-- Botão para gerar o prompt -->
+        <div class="button-container">
+            <button id="generate-button">Generate Prompt</button>
+        </div>
+    </div>
+
+    <!-- Notificação de cópia -->
     <div id="notification" class="notification">Prompt copied to clipboard!</div>
 
     <script src="app.js"></script>
