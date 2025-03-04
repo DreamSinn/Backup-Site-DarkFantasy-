@@ -35,12 +35,14 @@ body, html {
 .container {
     position: relative;
     z-index: 1; /* Coloca o conteúdo na frente do vídeo */
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.5); /* Fundo semi-transparente */
     padding: 20px;
     border-radius: 10px;
     width: 90%;
     max-width: 800px;
     text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px); /* Efeito de desfoque no fundo */
     margin: 20px auto; /* Centraliza o contêiner */
 }
 
@@ -48,54 +50,60 @@ body, html {
 h1 {
     font-family: 'Cinzel', serif;
     font-size: 2.5rem;
-    color: #6A1B9A;
-    text-shadow: 0 0 10px #6A1B9A, 0 0 20px #6A1B9A;
+    color: #FFD700; /* Dourado */
+    text-shadow: 0 0 10px #FFD700, 0 0 20px #FFD700; /* Efeito de brilho */
+    margin-bottom: 20px;
+}
+
+header p {
+    font-size: 1.2rem;
+    color: #f5f5f5;
+    margin-bottom: 20px;
 }
 
 /* Área do prompt */
 #prompt-area {
     padding: 20px;
-    border: 1px solid #6A1B9A;
-    background-color: rgba(34, 34, 34, 0.9);
+    border: 2px solid #8B4513; /* Borda marrom escura */
+    background-color: rgba(34, 34, 34, 0.7); /* Fundo semi-transparente */
     font-family: 'Courier New', monospace;
     color: #E0E0E0;
     margin-top: 20px;
     border-radius: 5px;
     cursor: pointer;
-    animation: glow 3s infinite;
+    animation: glow 3s infinite; /* Animação de brilho */
     height: 150px; /* Altura fixa */
     overflow-y: auto; /* Adiciona scroll se o conteúdo for muito longo */
+    width: 100%; /* Ocupa toda a largura do container */
+    box-sizing: border-box; /* Inclui padding e borda na largura */
+    background-image: url('https://www.transparenttextures.com/patterns/old-paper.png'); /* Textura de papel */
+    background-blend-mode: overlay;
 }
 
 /* Animação de brilho */
 @keyframes glow {
-    0% { box-shadow: 0 0 10px #6A1B9A; }
-    50% { box-shadow: 0 0 20px #6A1B9A; }
-    100% { box-shadow: 0 0 10px #6A1B9A; }
+    0% { box-shadow: 0 0 10px #8B4513; }
+    50% { box-shadow: 0 0 20px #8B4513; }
+    100% { box-shadow: 0 0 10px #8B4513; }
 }
 
 /* Botão */
 button {
     padding: 10px 20px;
-    background-color: #4CAF50;
+    background-color: #8B4513; /* Marrom escuro */
     color: #fff;
     border: none;
     cursor: pointer;
     border-radius: 5px;
     font-size: 16px;
     transition: all 0.3s ease;
+    font-family: 'Cinzel', serif;
+    margin-top: 20px;
 }
 
 button:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
-}
-
-/* Rodapé */
-footer {
-    margin-top: 20px;
-    font-size: 0.9rem;
-    color: #888;
+    background-color: #D2691E; /* Marrom mais claro ao passar o mouse */
+    transform: scale(1.05); /* Efeito de escala ao passar o mouse */
 }
 
 /* Grupo de entrada (textarea) */
@@ -121,7 +129,7 @@ footer {
     max-width: 600px;
     padding: 15px;
     border-radius: 5px;
-    border: 2px solid #6A1B9A;
+    border: 2px solid #8B4513;;
     background-color: rgba(34, 34, 34, 0.9);
     color: #e0e0e0;
     font-size: 14px;
@@ -149,7 +157,7 @@ footer {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background-color: #4CAF50;
+    background-color: #8B4513; /* Marrom escuro */
     color: white;
     padding: 15px;
     border-radius: 5px;
@@ -164,20 +172,19 @@ footer {
     max-width: 600px;
     padding: 15px;
     border-radius: 5px;
-    border: 2px solid #6A1B9A;
+    border: 2px solid #8B4513;
     background-color: rgba(34, 34, 34, 0.9);
     color: #e0e0e0;
-    font-size: 16px;
-    resize: none;
+    font-size: 14px;
+    resize: none; /* Impede o redimensionamento */
     min-height: 50px;
-    font-family: 'Cinzel', serif;
+    font-family: 'Courier New', monospace;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease;
     background-image: url('https://www.transparenttextures.com/patterns/old-paper.png');
     background-blend-mode: overlay;
     background-color: rgba(50, 50, 50, 0.8);
-    margin-bottom: 20px;
-    cursor: pointer;
+    margin-bottom: 20px; /* Espaçamento abaixo do título */
 }
 
 #generated-title:focus {
@@ -187,4 +194,9 @@ footer {
 
 #generated-title:hover {
     transform: scale(1.02);
+}
+
+/* Espaçamento entre as áreas */
+#prompt-area {
+    margin-bottom: 20px; /* Espaçamento abaixo da área de prompt */
 }
