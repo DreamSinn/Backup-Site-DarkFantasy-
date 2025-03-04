@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medieval Prompt Generator</title>
+    <title>Dark Fantasy Prompt Generator</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Cinzel&family=MedievalSharp&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -12,7 +12,7 @@
     <!-- Vídeo de fundo hospedado no GitHub -->
     <div id="video-background">
         <video autoplay muted loop id="my-video">
-            <source src="https://github.com/DreamSinn/Backup-Site-Medieval-/raw/refs/heads/main/video/pequeno.mp4" type="video/mp4">
+            <source src="https://github.com/DreamSinn/Backup-Site-DarkFantasy-/raw/refs/heads/main/videos/pequeno.mp4" type="video/mp4">
             Seu navegador não suporta vídeos HTML5.
         </video>
     </div>
@@ -20,19 +20,20 @@
     <!-- Conteúdo sobreposto -->
     <div class="container">
         <header>
-            <h1>Medieval Prompt Generator</h1>
-            <p>Create immersive medieval scenes with a single click.</p>
+            <h1>Dark Fantasy Prompt Generator</h1>
+            <p>Create immersive dark fantasy scenes with a single click.</p>
         </header>
 
         <!-- Área onde o prompt gerado será exibido -->
         <div id="prompt-area">Your generated prompt will appear here.</div>
 
-        <!-- Área onde o título gerado será exibido -->
+        <!-- Nova área para o título sugerido -->
         <div class="input-group">
             <label for="generated-title">
-                <i class="fas fa-scroll"></i> Generated Title:
+                <i class="fas fa-crown"></i> Suggested Title:
             </label>
-            <textarea id="generated-title" readonly></textarea>
+            <textarea id="generated-title" readonly placeholder="Your suggested title will appear here."></textarea>
+            <small>Click the title to copy it.</small>
         </div>
 
         <!-- Área para Negative Prompts -->
