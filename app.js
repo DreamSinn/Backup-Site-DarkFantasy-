@@ -1,7 +1,27 @@
 const generateButton = document.getElementById('generate-button');
 const promptArea = document.getElementById('prompt-area');
 const notification = document.getElementById('notification');
+const negativePromptInput = document.getElementById('negative-prompt');
+const generatedTitle = document.getElementById('generated-title');
 
+const emojis = ["⚔️", "🛡️", "🐉", "🔥", "🌑", "🌕", "🖤", "💀", "👑", "🏰", "🌋", "🌌"];
+
+const hashtags = [
+"#DarkFantasy", "#FantasyArt", "#AIArt", "#PromptGenerator", "#ImmersiveArt", "#FantasyWorld", "#DarkArt", "#FantasyLore", "#EpicFantasy", "#MysticalArt", "#FantasyVibes", "#FantasyCommunity", "#DarkFantasyArt", "#MacabreFantasy", "#FantasyDarkness", "#GothicFantasy", "#GrimFantasy", "#DarkMythology", "#OccultFantasy", "#ShadowyRealms", "#DarkEnchantment", "#TwistedFantasy", "#AIArtwork", "#FantasyAI", "#AIImagination", "#AIWorlds", "#NeuralFantasy", "#AIStorytelling", "#DreamlikeAI", "#GeneratedWorlds", "#AIConceptArt", "#FantasyRealms", "#EnchantedWorlds", "#MysticalLegends", "#ArcaneLands", "#LostKingdoms", "#EpicSagas", "#AncientMyths", "#FantasyNarrative", "#CursedLegends", "#HiddenRealms", "#DarkFantasyVibes", "#EpicWorlds", "#FantasyCreators", "#FantasyObsessed", "#ImmersiveLore", "#DreamyAesthetic", "#MagicalAtmosphere", "#FantasyDreamers", "#HauntinglyBeautiful"
+];
+
+const titlePatterns = [
+    "⚔️ {emoji} {figure} in {environment} {emoji} ⚔️ {hashtags}",
+    "🛡️ {emoji} {figure} {verb} in {environment} {emoji} 🛡️ {hashtags}",
+    "🐉 {emoji} A {figure} {verb} in {environment} {emoji} 🐉 {hashtags}",
+    "🔥 {emoji} The {figure} of {environment} {emoji} 🔥 {hashtags}",
+    "🌑 {emoji} {figure} {verb} under {environment} {emoji} 🌑 {hashtags}",
+    "🌕 {emoji} {figure} {verb} amidst {environment} {emoji} 🌕 {hashtags}",
+    "🖤 {emoji} {figure} {verb} within {environment} {emoji} 🖤 {hashtags}",
+    "💀 {emoji} {figure} {verb} surrounded by {environment} {emoji} 💀 {hashtags}"
+];
+
+// Área para colar as keywords posteriormente
 const keywords = {
     figures: {
         humans: [
@@ -158,137 +178,133 @@ const keywords = {
     ]
 };
 
-let usedBeginnings = [];
-let usedEndings = [];
-let usedFigures = {
-    humans: [], monsters: [], elves: [], dwarves: [], orcs: [], hobbits: [], ents: [], dragons: [],
-    goblins: [], trolls: [], fairies: [], demons: [], darkElves: [], halfElves: [], werewolves: [],
-    vampires: [], elementals: [], giants: []
-};
-let usedEnvironments = [];
-let usedLandscapeDetails = [];
-let usedSkies = [];
-let usedDistantElements = [];
-let usedGazeDirection = [];
-let usedVerbs = [];
-let usedMoodStyle = [];
-let usedTechnicalDescriptive = [];
-
-let counter = 0;
+let usedTitles = [];
 
 function getRandomItem(array, usedItems) {
-    if (array.length === usedItems.length) {
-        usedItems.length = 0; // Reset se todos os itens foram usados
+    if (!array || array.length === 0) {
+        console.error("getRandomItem: Array vazio fornecido.");
+        return null; // Ou um valor padrão apropriado
     }
+    if (array.length === usedItems.length) usedItems.length = 0;
     let item;
-    do {
-        item = array[Math.floor(Math.random() * array.length)];
-    } while (usedItems.includes(item));
-    usedItems.push(item);
+    do { item = array[Math.floor(Math.random() * array.length)]; }
+    while (usedItems && usedItems.includes(item));
+    if(usedItems){
+        usedItems.push(item);
+    }
     return item;
 }
 
-// Função para formatar os negative prompts
+function getRandomElement(array) {
+    if (!array || array.length === 0) {
+        console.error("getRandomElement: Array vazio fornecido.");
+        return null; // Ou um valor padrão apropriado
+    }
+    return array[Math.floor(Math.random() * array.length)];
+}
+
 function formatNegativePrompts(input) {
-    if (!input) return ''; // Retorna vazio se não houver input
+    if (!input) return '';
+    return input.split(/[,\s\n]+/).map(term => term.trim()).filter(term => term.length > 0).join(', ');
+}
 
-    // Remove espaços extras e divide os termos por vírgulas, espaços ou quebras de linha
-    const terms = input
-        .split(/[,\s\n]+/) // Divide por vírgulas, espaços ou quebras de linha
-        .map(term => term.trim()) // Remove espaços extras
-        .filter(term => term.length > 0); // Remove termos vazios
+function selectHashtags(count) {
+    const selectedHashtags = ["#aiart", "#midjourney"];
+    while (selectedHashtags.length < count) {
+        const randomHashtag = getRandomElement(hashtags);
+        if (!selectedHashtags.includes(randomHashtag)) {
+            selectedHashtags.push(randomHashtag);
+        }
+    }
+    return selectedHashtags;
+}
 
-    // Junta os termos com vírgulas
-    return terms.join(', ');
+function generateTitle() {
+    let title;
+    do {
+        // Seleciona um padrão de título aleatório
+        const pattern = getRandomElement(titlePatterns);
+
+        // Seleciona 2 emojis aleatórios
+        const randomEmojis = [
+            getRandomElement(emojis),
+            getRandomElement(emojis)
+        ];
+
+        // Seleciona uma figura, verbo e ambiente aleatórios
+        const figureType = getRandomElement(Object.keys(keywords.figures));
+        const figure = getRandomItem(keywords.figures[figureType], []);
+        const verb = getRandomItem(keywords.verbs, []);
+        const environment = getRandomItem(keywords.environments, []);
+
+        // Seleciona hashtags aleatórias
+        const randomHashtags = selectHashtags(6).join(" ");
+
+        // Substitui os placeholders no padrão do título
+        title = pattern
+            .replace("{emoji}", randomEmojis[0])
+            .replace("{figure}", figure)
+            .replace("{verb}", verb)
+            .replace("{environment}", environment)
+            .replace("{emoji}", randomEmojis[1])
+            .replace("{hashtags}", randomHashtags);
+    } while (usedTitles.includes(title)); // Evita títulos repetidos
+
+    usedTitles.push(title); // Adiciona o título à lista de usados
+    if (usedTitles.length > 10) usedTitles.shift(); // Mantém apenas os últimos 10 títulos na lista
+
+    return title;
 }
 
 function generateLandscapePrompt() {
-    let newPrompt = "/imagine prompt: ";
-    
-    // Escolhe um início único
-    newPrompt += `${getRandomItem(keywords.beginnings, usedBeginnings)} `;
-    
-    // Gera uma paisagem sem figuras
-    newPrompt += `a ${getRandomItem(keywords.environments, usedEnvironments)} of ${getRandomItem(keywords.landscapeDetails, usedLandscapeDetails)}, `;
-    newPrompt += `${getRandomItem(keywords.verbs, usedVerbs)} `;
-    newPrompt += `${getRandomItem(keywords.moodStyle, usedMoodStyle)} `;
-    newPrompt += `${getRandomItem(keywords.technicalDescriptive, usedTechnicalDescriptive)}. `;
+    let prompt = "/imagine prompt: ";
+    prompt += `${getRandomItem(keywords.beginnings, [])} `;
+    prompt += `A ${getRandomItem(keywords.moodStyle, [])} ${getRandomItem(keywords.environments, [])}, `;
+    prompt += `with ${getRandomItem(keywords.landscapeDetails, [])}, `;
+    prompt += `under ${getRandomItem(keywords.skies, [])}. `;
+    prompt += `In the distance, ${getRandomItem(keywords.distantElements, [])}. `;
+    prompt += `${getRandomItem(keywords.technicalDescriptive, [])}. `;
+    prompt += `${getRandomItem(keywords.endings, [])}`;
+    return prompt;
+}
 
-    // Escolhe um final único
-    newPrompt += getRandomItem(keywords.endings, usedEndings);
-    
-    // Adiciona as palavras obrigatórias
-    newPrompt += " dvd screengrab, from 1982 dark fantasy film, 'excalibur' --ar 3:2 --v 5 --stylize 1000 --style DarkFantasy --style retro_bits";
-    
-    return newPrompt;
+function generateFigurePrompt() {
+    let prompt = "/imagine prompt: ";
+    prompt += `${getRandomItem(keywords.beginnings, [])} `;
+    const figureType = getRandomElement(Object.keys(keywords.figures));
+    const figure = getRandomItem(keywords.figures[figureType], []);
+    prompt += `${figure}, positioned close to the viewer, `;
+    prompt += `stands amidst ${getRandomItem(keywords.environments, [])} of ${getRandomItem(keywords.landscapeDetails, [])}, `;
+    prompt += `${getRandomItem(keywords.verbs, [])} ${getRandomItem(keywords.moodStyle, [])}. `;
+    prompt += `${figure} is ${getRandomItem(keywords.gazeDirection, [])}. `;
+    prompt += `${getRandomItem(keywords.endings, [])}`;
+    return prompt;
 }
 
 function generatePrompt() {
     console.log("Função generatePrompt() chamada!");
+    try {
+        let newPrompt;
+        if (Math.random() < 0.5) {
+            console.log("Gerando prompt de paisagem...");
+            newPrompt = generateLandscapePrompt();
+        } else {
+            console.log("Gerando prompt de figura...");
+            newPrompt = generateFigurePrompt();
+        }
+        promptArea.textContent = newPrompt;
+        console.log("Prompt gerado com sucesso:", newPrompt);
 
-    // Obtém e formata os Negative Prompts inseridos pelo usuário
-    const negativePromptInput = document.getElementById('negative-prompt').value;
-    const formattedNegativePrompts = formatNegativePrompts(negativePromptInput);
-    const negativePrompts = formattedNegativePrompts ? ` --no ${formattedNegativePrompts}` : '';
-
-    let newPrompt;
-
-    // Decide aleatoriamente se o prompt será uma paisagem ou incluirá figuras
-    if (Math.random() < 0.5) {
-        newPrompt = generateLandscapePrompt();
-    } else {
-        newPrompt = "/imagine prompt: ";
-        
-        // Escolhe um início único
-        newPrompt += `${getRandomItem(keywords.beginnings, usedBeginnings)} `;
-        
-        // Alterna entre as raças
-        const races = Object.keys(keywords.figures);
-        let figureType = races[counter % races.length];
-        let figure = getRandomItem(keywords.figures[figureType], usedFigures[figureType]);
-        
-        newPrompt += `${figure}, positioned close to the viewer, `;
-
-        // Evita repetir os mesmos ambientes e terminações
-        let environment = getRandomItem(keywords.environments, usedEnvironments);
-        let ending = getRandomItem(keywords.endings, usedEndings);
-
-        newPrompt += `stands amidst ${environment} of ${getRandomItem(keywords.landscapeDetails, usedLandscapeDetails)}, `;
-        newPrompt += `${getRandomItem(keywords.verbs, usedVerbs)} `;
-        newPrompt += `${getRandomItem(keywords.moodStyle, usedMoodStyle)} `;
-        newPrompt += `${getRandomItem(keywords.technicalDescriptive, usedTechnicalDescriptive)}. `;
-
-        // Adiciona a direção do olhar para a câmera
-        newPrompt += `${figure} is ${getRandomItem(keywords.gazeDirection, usedGazeDirection)}. `;
-
-        // Escolhe um final único
-        newPrompt += ending;
-        
-        // Adiciona as palavras obrigatórias
-        newPrompt += " dvd screengrab, from 1982 dark fantasy film, 'excalibur' --ar 3:2 --v 5 --stylize 1000 --style DarkFantasy --style retro_bits";
+        // Gera e exibe o título
+        const title = generateTitle();
+        generatedTitle.value = title;
+        console.log("Título gerado com sucesso:", title);
+    } catch (error) {
+        console.error("Erro ao gerar prompt:", error);
     }
-
-    // Adiciona os Negative Prompts ao final do prompt
-    newPrompt += negativePrompts;
-    
-    counter++; // Incrementa o contador para alternar entre as raças
-    
-    return newPrompt;
 }
 
 generateButton.addEventListener('click', function() {
     console.log("Botão Gerar clicado!");
-    promptArea.textContent = generatePrompt();
-});
-
-// Adiciona a funcionalidade de copiar ao clicar na área de prompt
-promptArea.addEventListener('click', function() {
-    if (promptArea.textContent.trim() !== "Your generated prompt will appear here.") {
-        navigator.clipboard.writeText(promptArea.textContent).then(function() {
-            notification.style.display = 'block';
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 2000);
-        });
-    }
+    generatePrompt();
 });
