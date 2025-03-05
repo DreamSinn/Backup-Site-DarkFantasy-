@@ -7,7 +7,7 @@ const generatedTitle = document.getElementById('generated-title');
 const emojis = ["⚔️", "🛡️", "🐉", "🔥", "🌑", "🌕", "🖤", "💀", "👑", "🏰", "🌋", "🌌"];
 
 const hashtags = [
-"#DarkFantasy", "#FantasyArt", "#AIArt", "#PromptGenerator", "#ImmersiveArt", "#FantasyWorld", "#DarkArt", "#FantasyLore", "#EpicFantasy", "#MysticalArt", "#FantasyVibes", "#FantasyCommunity", "#DarkFantasyArt", "#MacabreFantasy", "#FantasyDarkness", "#GothicFantasy", "#GrimFantasy", "#DarkMythology", "#OccultFantasy", "#ShadowyRealms", "#DarkEnchantment", "#TwistedFantasy", "#AIArtwork", "#FantasyAI", "#AIImagination", "#AIWorlds", "#NeuralFantasy", "#AIStorytelling", "#DreamlikeAI", "#GeneratedWorlds", "#AIConceptArt", "#FantasyRealms", "#EnchantedWorlds", "#MysticalLegends", "#ArcaneLands", "#LostKingdoms", "#EpicSagas", "#AncientMyths", "#FantasyNarrative", "#CursedLegends", "#HiddenRealms", "#DarkFantasyVibes", "#EpicWorlds", "#FantasyCreators", "#FantasyObsessed", "#ImmersiveLore", "#DreamyAesthetic", "#MagicalAtmosphere", "#FantasyDreamers", "#HauntinglyBeautiful"
+    "#DarkFantasy", "#FantasyArt", "#AIArt", "#PromptGenerator", "#ImmersiveArt", "#FantasyWorld", "#DarkArt", "#FantasyLore", "#EpicFantasy", "#MysticalArt", "#FantasyVibes", "#FantasyCommunity", "#DarkFantasyArt", "#MacabreFantasy", "#FantasyDarkness", "#GothicFantasy", "#GrimFantasy", "#DarkMythology", "#OccultFantasy", "#ShadowyRealms", "#DarkEnchantment", "#TwistedFantasy", "#AIArtwork", "#FantasyAI", "#AIImagination", "#AIWorlds", "#NeuralFantasy", "#AIStorytelling", "#DreamlikeAI", "#GeneratedWorlds", "#AIConceptArt", "#FantasyRealms", "#EnchantedWorlds", "#MysticalLegends", "#ArcaneLands", "#LostKingdoms", "#EpicSagas", "#AncientMyths", "#FantasyNarrative", "#CursedLegends", "#HiddenRealms", "#DarkFantasyVibes", "#EpicWorlds", "#FantasyCreators", "#FantasyObsessed", "#ImmersiveLore", "#DreamyAesthetic", "#MagicalAtmosphere", "#FantasyDreamers", "#HauntinglyBeautiful"
 ];
 
 const titlePatterns = [
@@ -183,13 +183,13 @@ let usedTitles = [];
 function getRandomItem(array, usedItems) {
     if (!array || array.length === 0) {
         console.error("getRandomItem: Array vazio fornecido.");
-        return null; // Ou um valor padrão apropriado
+        return null;
     }
     if (array.length === usedItems.length) usedItems.length = 0;
     let item;
     do { item = array[Math.floor(Math.random() * array.length)]; }
     while (usedItems && usedItems.includes(item));
-    if(usedItems){
+    if (usedItems) {
         usedItems.push(item);
     }
     return item;
@@ -198,7 +198,7 @@ function getRandomItem(array, usedItems) {
 function getRandomElement(array) {
     if (!array || array.length === 0) {
         console.error("getRandomElement: Array vazio fornecido.");
-        return null; // Ou um valor padrão apropriado
+        return null;
     }
     return array[Math.floor(Math.random() * array.length)];
 }
@@ -222,25 +222,20 @@ function selectHashtags(count) {
 function generateTitle() {
     let title;
     do {
-        // Seleciona um padrão de título aleatório
         const pattern = getRandomElement(titlePatterns);
-
-        // Seleciona 2 emojis aleatórios
         const randomEmojis = [
             getRandomElement(emojis),
             getRandomElement(emojis)
         ];
 
-        // Seleciona uma figura, verbo e ambiente aleatórios
+        // Substitua pelos valores das suas keywords
         const figureType = getRandomElement(Object.keys(keywords.figures));
-        const figure = getRandomItem(keywords.figures[figureType], []);
-        const verb = getRandomItem(keywords.verbs, []);
-        const environment = getRandomItem(keywords.environments, []);
+        const figure = getRandomItem(keywords.figures[figureType], []); // Exemplo: "A lone, cloaked figure"
+        const verb = getRandomItem(keywords.verbs, []); // Exemplo: "lurking"
+        const environment = getRandomItem(keywords.environments, []); // Exemplo: "a dark forest"
 
-        // Seleciona hashtags aleatórias
         const randomHashtags = selectHashtags(6).join(" ");
 
-        // Substitui os placeholders no padrão do título
         title = pattern
             .replace("{emoji}", randomEmojis[0])
             .replace("{figure}", figure)
@@ -248,36 +243,42 @@ function generateTitle() {
             .replace("{environment}", environment)
             .replace("{emoji}", randomEmojis[1])
             .replace("{hashtags}", randomHashtags);
-    } while (usedTitles.includes(title)); // Evita títulos repetidos
+    } while (usedTitles.includes(title));
 
-    usedTitles.push(title); // Adiciona o título à lista de usados
-    if (usedTitles.length > 10) usedTitles.shift(); // Mantém apenas os últimos 10 títulos na lista
+    usedTitles.push(title);
+    if (usedTitles.length > 10) usedTitles.shift();
 
     return title;
 }
 
 function generateLandscapePrompt() {
     let prompt = "/imagine prompt: ";
-    prompt += `${getRandomItem(keywords.beginnings, [])} `;
-    prompt += `A ${getRandomItem(keywords.moodStyle, [])} ${getRandomItem(keywords.environments, [])}, `;
-    prompt += `with ${getRandomItem(keywords.landscapeDetails, [])}, `;
-    prompt += `under ${getRandomItem(keywords.skies, [])}. `;
-    prompt += `In the distance, ${getRandomItem(keywords.distantElements, [])}. `;
-    prompt += `${getRandomItem(keywords.technicalDescriptive, [])}. `;
-    prompt += `${getRandomItem(keywords.endings, [])}`;
+
+    // Substitua pelos valores das suas keywords
+    prompt += `${getRandomItem(keywords.beginnings, [])} `; // Exemplo: "The sky is black, a dark fantasy scene with"
+    prompt += `A ${getRandomItem(keywords.moodStyle, [])} ${getRandomItem(keywords.environments, [])}, `; // Exemplo: "A dramatic desolate wasteland"
+    prompt += `with ${getRandomItem(keywords.landscapeDetails, [])}, `; // Exemplo: "jagged rocks and withered trees"
+    prompt += `under ${getRandomItem(keywords.skies, [])}. `; // Exemplo: "a blood-red sky"
+    prompt += `In the distance, ${getRandomItem(keywords.distantElements, [])}. `; // Exemplo: "a ruined tower crumbles"
+    prompt += `${getRandomItem(keywords.technicalDescriptive, [])}. `; // Exemplo: "4K, limited color palette (purple, yellow, blacks)"
+    prompt += `${getRandomItem(keywords.endings, [])}`; // Exemplo: "The atmosphere is charged with a suffocating energy."
+
     return prompt;
 }
 
 function generateFigurePrompt() {
     let prompt = "/imagine prompt: ";
-    prompt += `${getRandomItem(keywords.beginnings, [])} `;
-    const figureType = getRandomElement(Object.keys(keywords.figures));
-    const figure = getRandomItem(keywords.figures[figureType], []);
+
+    // Substitua pelos valores das suas keywords
+    prompt += `${getRandomItem(keywords.beginnings, [])} `; // Exemplo: "The sky is black, a dark fantasy scene with"
+    const figureType = getRandomElement(Object.keys(keywords.figures)); // Escolhe uma categoria de figura
+    const figure = getRandomItem(keywords.figures[figureType], []); // Exemplo: "A lone, cloaked figure"
     prompt += `${figure}, positioned close to the viewer, `;
-    prompt += `stands amidst ${getRandomItem(keywords.environments, [])} of ${getRandomItem(keywords.landscapeDetails, [])}, `;
-    prompt += `${getRandomItem(keywords.verbs, [])} ${getRandomItem(keywords.moodStyle, [])}. `;
-    prompt += `${figure} is ${getRandomItem(keywords.gazeDirection, [])}. `;
-    prompt += `${getRandomItem(keywords.endings, [])}`;
+    prompt += `stands amidst ${getRandomItem(keywords.environments, [])} of ${getRandomItem(keywords.landscapeDetails, [])}, `; // Exemplo: "a desolate wasteland of cracked earth"
+    prompt += `${getRandomItem(keywords.verbs, [])} ${getRandomItem(keywords.moodStyle, [])}. `; // Exemplo: "lurking dramatically"
+    prompt += `${figure} is ${getRandomItem(keywords.gazeDirection, [])}. `; // Exemplo: "staring directly at the viewer"
+    prompt += `${getRandomItem(keywords.endings, [])}`; // Exemplo: "The air crackles with malevolent energy."
+
     return prompt;
 }
 
@@ -295,7 +296,6 @@ function generatePrompt() {
         promptArea.textContent = newPrompt;
         console.log("Prompt gerado com sucesso:", newPrompt);
 
-        // Gera e exibe o título
         const title = generateTitle();
         generatedTitle.value = title;
         console.log("Título gerado com sucesso:", title);
@@ -304,7 +304,30 @@ function generatePrompt() {
     }
 }
 
-generateButton.addEventListener('click', function() {
+// Função para copiar texto para a área de transferência
+function copyToClipboard(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        notification.textContent = "Copied to clipboard!";
+        notification.style.display = "block";
+        setTimeout(() => {
+            notification.style.display = "none";
+        }, 2000);
+    }).catch(err => {
+        console.error("Failed to copy text: ", err);
+    });
+}
+
+// Adicionar evento de clique para copiar o título
+generatedTitle.addEventListener('click', function () {
+    copyToClipboard(generatedTitle.value);
+});
+
+// Adicionar evento de clique para copiar o prompt
+promptArea.addEventListener('click', function () {
+    copyToClipboard(promptArea.textContent);
+});
+
+generateButton.addEventListener('click', function () {
     console.log("Botão Gerar clicado!");
     generatePrompt();
 });
